@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realizar Pago</title>
+    <link rel="stylesheet" href="Pa.css" type="text/css"/>
+</head>
+<body>
+    <div class="container">
+        <h2>Realizar Pago
+        <!-- Aquí se mostrará el total -->
+        <p>Total de la compra: $ <span id="total"></span></p></h2>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <label for="pin">PIN:</label>
+        <input type="text" id="pin" name="pin" required pattern="[0-9]{4}" title="El PIN debe ser un número de 4 dígitos" maxlength="4">
+        
+        
+        <label for="direccion">Dirección:</label>
+        <select id="direccion" name="direccion" required>
+        <option value="direccion1">Dirección 1</option>
+        <option value="direccion2">Dirección 2</option>
+        </select>
+
+            <div class="metodos-pago">
+                <img src="Img/Visa.png" alt="Método de pago 1" onclick="mostrarFormulario('metodo1')">
+                <img src="Img/Payapal.png" alt="Método de pago 2" onclick="mostrarFormulario('metodo2')">
+            </div>
+        
+            <!-- Formulario de pago para el método 1 -->
+            <form id="form-metodo1" action="/procesar_pago" method="post" style="display: none;">
+        <h2>Ingresa los Datos de Tu Tarjeta de Crédito</h2>
+        <form action="submit.php" method="POST">
+            <div class="input-group">
+                <label for="nombre">Nombre en la Tarjeta:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="input-group">
+                <label for="numero">Número de Tarjeta:</label>
+                <input type="text" id="numero" name="numero" pattern="[0-9]{16}" required>
+                <small>Debe contener exactamente 16 dígitos</small>
+            </div>
+            <div class="input-group">
+                <label for="fecha">Fecha de Vencimiento:</label>
+                <input type="text" id="fecha" name="fecha" placeholder="MM/AA" pattern="(0[1-9]|1[0-2])\/([0-9]{2})" required>
+                <small>Formato: MM/AA</small>
+            </div>
+            <div class="input-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" pattern="[0-9]{3}" required>
+                <small>Código de seguridad de 3 dígitos en el reverso de la tarjeta</small>
+            </div>
+                <!-- Otros campos específicos del método de pago 1 -->
+            </form>
+        
+            <!-- Formulario de pago para el método 2 -->
+            <form id="form-metodo2" action="/procesar_pago" method="post" style="display: none;">
+        <h2>Ingresa tus Datos de Pago de PayPal</h2>
+        <form action="submit.php" method="POST">
+            <div class="input-group">
+                <label for="email">Email de PayPal:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Contraseña de PayPal:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+                <div class="input-group">
+                <label for="monto">Monto a Pagar:</label>
+                <input type="number" id="monto" name="monto" min="0.01" step="0.01" required>
+            </div>
+            </form>
+            <input type="submit" value="Realizar Pago">
+        </form>
+        <p>¿No tienes una cuenta? <a href="Crear cuenta.html">Crear cuenta</a></p>
+    </div>
+    
+
+
+
+    <script>
+        // Obtener el total de la compra desde la URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var totalCompra = urlParams.get('total');
+
+        // Mostrar el total en el elemento con el ID "total"
+        document.getElementById("total").innerText = totalCompra;
+
+        function mostrarFormulario(metodo) {
+    // Ocultar todos los formularios de pago
+    document.getElementById('form-metodo1').style.display = 'none';
+    document.getElementById('form-metodo2').style.display = 'none';
+    
+    // Mostrar el formulario de pago correspondiente al método seleccionado
+    if (metodo === 'metodo1') {
+        document.getElementById('form-metodo1').style.display = 'block';
+    } else if (metodo === 'metodo2') {
+        document.getElementById('form-metodo2').style.display = 'block';
+    }
+}
+
+        </script>
+</body>
+</html>
